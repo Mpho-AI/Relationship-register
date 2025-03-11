@@ -5,7 +5,7 @@ from app.services.auth import get_current_user
 from app.models import ChatMessage, PrimaryUser
 from app.database import get_db
 from sqlalchemy.orm import Session
-
+ 
 router = APIRouter()
 
 # Store active connections
