@@ -1,18 +1,22 @@
+from fastapi_cache.decorator import cache
+from app.core.config import settings
 from deepface import DeepFace
 import numpy as np
 from typing import List, Dict
 import cv2
 
 class FacialRecognitionService:
-    def __init__(self, similarity_threshold: float = 0.90):
-        self.similarity_threshold = similarity_threshold
+    def __init__(self):
+        self.similarity_threshold = settings.FACE_SIMILARITY_THRESHOLD
+        self.model_name = settings.FACE_MODEL_NAME
 
+    @cache(expire=3600)  # Cache results for 1 hour
     async def compare_faces(self, source_image: str, target_image: str) -> Dict:
         try:
             result = DeepFace.verify(
                 img1_path=source_image,
                 img2_path=target_image,
-                model_name="VGG-Face",
+                model_name=self.model_name,
                 distance_metric="cosine"
             )
             
